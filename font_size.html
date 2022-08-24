@@ -20,7 +20,6 @@
 <script>
 
     kiwi.plugin('font-size', function(kiwi, log) {
-	
 		
 		kiwi.on('ready', function() {
 		setDefaultSetting(90);
@@ -30,8 +29,8 @@
 		let fontSize = new kiwi.Vue({
             template: '#font-size',
             data() {
-				var initsize=kiwi.state.setting('font-size');
-				return {
+		var initsize=kiwi.state.setting('font-size');
+		return {
                     size: initsize,
                 };
             },
@@ -39,29 +38,29 @@
                 increaseFont: function increaseFont() {
                     if(this.size < 200) {
                         this.size = this.size + 10;
-						kiwi.state.setting('font-size', this.size);
+			kiwi.state.setting('font-size', this.size);
                     }
                     this.resizeFont()
                 },
                 decreaseFont: function decreaseFont() {
                     if(this.size > 70) {
                         this.size = this.size - 10;
-						kiwi.state.setting('font-size', this.size);
+			kiwi.state.setting('font-size', this.size);
                     }
                     this.resizeFont()
                 },
                 resetFont: function resetFont() {
 
-                    this.size = 90;
-					kiwi.state.setting('font-size', '90');
-                    this.resizeFont()
+                	this.size = 90;
+			kiwi.state.setting('font-size', '90');
+                   	this.resizeFont()
                 },
                 resizeFont: function resizeFont() {
-					if(this.size > 200) {
-						console.log('plugin-fontsize: emergency reset ( '+this.size+')');
-						this.size = 90;
-						kiwi.state.setting('font-size', this.size);
-					}
+			if(this.size > 200) {
+				console.log('plugin-fontsize: emergency reset ( '+this.size+')');
+				this.size = 90;
+				kiwi.state.setting('font-size', this.size);
+			}
                     document.querySelector('.kiwi-wrap').style.fontSize = this.size + '%';
                 },
 
@@ -71,7 +70,6 @@
 		
 		function setDefaultSetting(val) {
 			if (!kiwi.state.setting('font-size')) {
-				console.log('debug: font-size was not set');
 			kiwi.state.setting('font-size', val);
 			}
 		}
