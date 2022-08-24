@@ -1,48 +1,81 @@
 <template id="font-size">
     <div class="kiwi-format-buttons">
-        <a class="kiwi-decrease-font" title="Reduce text size"
+        <button class="kiwi-decrease-font" title="Reset text size"
+             @click="resetFont"
+        >
+            A<sup>reset</sup>
+        </button>
+        <button class="kiwi-decrease-font" title="Reduce text size"
              @click="decreaseFont"
         >
             A<sup>-</sup>
-        </a>
-        <a class="kiwi-increase-font" title="Increase text size"
+        </button>
+        <button class="kiwi-increase-font" title="Increase text size"
              @click="increaseFont"
         >
             A<sup>+</sup>
-        </a>
+        </button>
     </div>
 </template>
 <script>
-    kiwi.plugin('font-size', function(kiwi, log) {
 
-        let fontSize = new kiwi.Vue({
+    kiwi.plugin('font-size', function(kiwi, log) {
+	
+		
+		kiwi.on('ready', function() {
+		setDefaultSetting(90);
+		document.querySelector('.kiwi-wrap').style.fontSize = kiwi.state.setting('font-size') + '%';
+		})
+		
+		let fontSize = new kiwi.Vue({
             template: '#font-size',
             data() {
-                return {
-                    size: 90,
+				var initsize=kiwi.state.setting('font-size');
+				return {
+                    size: initsize,
                 };
             },
             methods: {
                 increaseFont: function increaseFont() {
-                    if(this.size < 140) {
+                    if(this.size < 200) {
                         this.size = this.size + 10;
-                        console.log('reduce', this.size);
+						kiwi.state.setting('font-size', this.size);
                     }
                     this.resizeFont()
                 },
                 decreaseFont: function decreaseFont() {
                     if(this.size > 70) {
                         this.size = this.size - 10;
-                        console.log('increase', this.size);
+						kiwi.state.setting('font-size', this.size);
                     }
                     this.resizeFont()
                 },
+                resetFont: function resetFont() {
+
+                    this.size = 90;
+					kiwi.state.setting('font-size', '90');
+                    this.resizeFont()
+                },
                 resizeFont: function resizeFont() {
+					if(this.size > 200) {
+						console.log('plugin-fontsize: emergency reset ( '+this.size+')');
+						this.size = 90;
+						kiwi.state.setting('font-size', this.size);
+					}
                     document.querySelector('.kiwi-wrap').style.fontSize = this.size + '%';
                 },
+
             },
         });
         kiwi.addUi('browser', fontSize.$mount().$el);
+		
+		function setDefaultSetting(val) {
+			if (!kiwi.state.setting('font-size')) {
+				console.log('debug: font-size was not set');
+			kiwi.state.setting('font-size', val);
+			}
+		}
+
     });
 </script>
 
